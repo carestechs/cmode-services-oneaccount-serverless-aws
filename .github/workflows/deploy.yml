@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: prod  # this maps to your production environment in repo settings
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production..."
+          # Your production deploy commands here.
+  
+  deploy-development:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment: dev  # maps to your development environment
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Development
+        run: |
+          echo "Deploying to development..."
+          # Your development deploy commands here.
