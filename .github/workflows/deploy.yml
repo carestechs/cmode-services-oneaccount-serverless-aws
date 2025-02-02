@@ -6,13 +6,26 @@ on:
       - main
       - dev
 
+env:
+  AWS_REGION : "sa-east-1" #Change to reflect your Region
+
 jobs:
   deploy-production:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: prod  # this maps to your production environment in repo settings
+    environment: production  # this maps to your production environment in repo settings
     steps:
       - uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: ${{ env.DEPLOY_ROLE }} #change to reflect your IAM role’s ARN
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+      # Hello from AWS: WhoAmI
+      - name: Sts GetCallerIdentity
+        run: |
+          aws sts get-caller-identity
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
@@ -21,7 +34,7 @@ jobs:
   deploy-development:
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
-    environment: dev  # maps to your development environment
+    environment: development  # maps to your development environment
     steps:
       - uses: actions/checkout@v3
       - name: Deploy to Development

@@ -18,13 +18,14 @@ permissions:
 jobs:
   AssumeRoleAndCallIdentity:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: "arn:aws:iam::897757051609:role/stack-cmode-setup-GithubActionsProdBuildRole-2WePmooqfR9D" #change to reflect your IAM role’s ARN
+          role-to-assume: ${{ env.DEPLOY_ROLE }} #change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
       # Hello from AWS: WhoAmI
