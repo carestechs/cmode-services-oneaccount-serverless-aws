@@ -21,6 +21,9 @@ jobs:
     environment: production  # this maps to your production environment in repo settings
     steps:
       - uses: actions/checkout@v3
+      - name: Sts GetCallerIdentity
+        run: |
+          echo ${{ env.DEPLOY_ROLE }}
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
