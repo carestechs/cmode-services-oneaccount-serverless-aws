@@ -21,22 +21,12 @@ jobs:
     environment: production  # this maps to your production environment in repo settings
     steps:
       - uses: actions/checkout@v3
-      - name: Read env vars
-        run: |
-          echo ${{ vars.DEPLOY_ROLE }}
-      - name: Read env vars2
-        run: |
-          echo ${{ vars.SHORT }}
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: "${{ vars.DEPLOY_ROLE }}" #change to reflect your IAM role’s ARN
+          role-to-assume: "${{ vars.SETUP_ROLE }}" #change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-      # Hello from AWS: WhoAmI
-      - name: Sts GetCallerIdentity
-        run: |
-          aws sts get-caller-identity
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
