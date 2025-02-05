@@ -31,8 +31,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
           role-to-assume: "${{ vars.DEPLOY_ROLE }}" #change to reflect your IAM role’s ARN
-          role-session-name: Deploy_Session
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
+          role-chaining: true
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
